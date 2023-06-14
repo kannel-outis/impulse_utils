@@ -1,3 +1,4 @@
+import 'package:impulse_utils/models/application.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'impulse_utils_method_channel.dart';
@@ -26,4 +27,6 @@ abstract class ImpulseUtilsPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
+  Future<Application> getDeviceApplications(bool showSystemApps);
 }
