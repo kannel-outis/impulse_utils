@@ -3,7 +3,7 @@ import 'package:impulse_utils/file_manager/file_manager.dart';
 import 'package:impulse_utils/file_manager/impulse_file.dart';
 
 class SecondPage extends StatelessWidget {
-  final List<ImpulseFileSystem> files;
+  final List<ImpulseFileEntity> files;
   const SecondPage({
     super.key,
     required this.files,
@@ -25,6 +25,9 @@ class SecondPage extends StatelessWidget {
               title: Text(file.name),
               // subtitle:
               //     file.fileType == null && file.isFolder ? null : Text(file.fileType!.type),
+              subtitle:
+                  file.isFolder ? null : Text(file.castToFile.sizeToString),
+
               leading: file.isFolder ? const Icon(Icons.folder) : null,
               onTap: () {
                 if (!file.isFolder) return;

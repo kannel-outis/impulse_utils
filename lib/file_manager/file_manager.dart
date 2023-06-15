@@ -51,14 +51,23 @@ class FileManager {
     return list;
   }
 
-  List<ImpulseFileSystem> getFileInDir([ImpulseFileSystem? folder]) {
-    final list = <ImpulseFileSystem>[];
+  List<ImpulseFileEntity> getFileInDir([ImpulseFileEntity? folder]) {
+    final files = <ImpulseFile>[];
+    final directories = <ImpulseDirectory>[];
     final dir = (folder?.file as Directory?) ?? _rootDir.first;
     final listSync = dir.listSync();
-    listSync.sort((a, b) => a.path.compareTo(b.path));
+    listSync
+        .sort((a, b) => a.path.toLowerCase().compareTo(b.path.toLowerCase()));
     for (var item in listSync) {
-      list.add(ImpulseFileSystem(file: item));
+      if (item is File) {
+        files.add(ImpulseFile(file: item));
+      } else {
+        directories.add(ImpulseDirectory(directory: item as Directory));
+      }
     }
+
+    final list = [...directories, ...files];
+
     return list;
   }
 }
