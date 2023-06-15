@@ -30,7 +30,6 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
           final resultMap = Map<String, dynamic>.from(app)
               .map((key, value) => MapEntry(key, value as dynamic));
           applications.add(Application.fromMap(resultMap));
-          log(resultMap.toString());
         }
       }
 

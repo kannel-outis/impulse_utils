@@ -15,7 +15,7 @@ class Application {
     required this.appPath,
     required this.appIcon,
     required this.appSize,
-    required this.isSystemApp,
+    this.isSystemApp = false,
     this.isDisabled = false,
   });
   factory Application.fromMap(Map<String, dynamic> map) {
