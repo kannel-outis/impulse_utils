@@ -12,7 +12,7 @@ class MockImpulseUtilsPlatform
   Future<String?> getPlatformVersion() => Future.value('42');
 
   @override
-  Future<Application> getDeviceApplications(bool showSystemApps) {
+  Future<List<Application>> getDeviceApplications(bool showSystemApps) {
     // TODO: implement getDeviceApplications
     throw UnimplementedError();
   }

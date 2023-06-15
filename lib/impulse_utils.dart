@@ -1,4 +1,3 @@
-
 import 'package:impulse_utils/models/application.dart';
 
 import 'impulse_utils_platform_interface.dart';
@@ -8,7 +7,7 @@ class ImpulseUtils {
     return ImpulseUtilsPlatform.instance.getPlatformVersion();
   }
 
-  Future<Application> getInstalledApplication() {
+  Future<List<Application>> getInstalledApplication() {
     return ImpulseUtilsPlatform.instance.getDeviceApplications(false);
   }
 }

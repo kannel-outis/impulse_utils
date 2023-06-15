@@ -28,5 +28,5 @@ abstract class ImpulseUtilsPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<Application> getDeviceApplications(bool showSystemApps);
+  Future<List<Application>> getDeviceApplications(bool showSystemApps);
 }

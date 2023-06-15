@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:impulse_utils/models/application.dart';
@@ -18,15 +20,21 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
   }
 
   @override
-  Future<Application> getDeviceApplications(bool showSystemApps) async {
+  Future<List<Application>> getDeviceApplications(bool showSystemApps) async {
+    final applications = <Application>[];
     try {
-      final result = await methodChannel
-          .invokeMethod<Map<String, dynamic>>("getDeviceApplications");
+      final result =
+          await methodChannel.invokeMethod<List>("getDeviceApplications");
       if (result != null) {
-        return Application.fromMap(result);
-      } else {
-        throw Exception("Somethign went wrong");
+        for (var app in result) {
+          final resultMap = Map<String, dynamic>.from(app)
+              .map((key, value) => MapEntry(key, value as dynamic));
+          applications.add(Application.fromMap(resultMap));
+          log(resultMap.toString());
+        }
       }
+
+      return applications;
     } catch (e) {
       print(e.toString());
       rethrow;

@@ -3,7 +3,9 @@ package bart.allen.kidflash.impulse_utils.impulse_utils
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -65,7 +67,7 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
   private fun getDeviceApps(showSystemApps: Boolean): List<Map<String, Any>>{
     val mutableList = mutableListOf<Map<String, Any>>()
     val packageManager = flutterbinding.applicationContext.packageManager
-    val installedApps = packageManager.getInstalledApplications(PackageManager.MATCH_SYSTEM_ONLY)
+    val installedApps = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
     for ( app: ApplicationInfo in installedApps){
       val map = mutableMapOf<String, Any>()
       map["appName"] = app.loadLabel(packageManager).toString()
@@ -74,15 +76,23 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
       map["appSize"] = File(app.publicSourceDir).length()
       map["isSystemApp"] = (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
       map["isDisabled"] = !app.enabled
-      val bitMap = (packageManager.getApplicationIcon(app) as BitmapDrawable).bitmap
+      val bitMap = getBitMapFromDrawable(packageManager.getApplicationIcon(app))
       val outputStream = ByteArrayOutputStream()
       bitMap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
       map["appIcon"] = outputStream.toByteArray()
-      Log.d("native",  outputStream.toByteArray().toString())
+//      Log.d("native",  outputStream.toByteArray().toString())
       mutableList.add(map)
     }
 
     return mutableList
+  }
+
+  private fun getBitMapFromDrawable (drawable: Drawable) : Bitmap{
+    val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    drawable.setBounds(0,0, canvas.width, canvas.height)
+    drawable.draw(canvas)
+    return bitmap
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {

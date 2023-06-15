@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:impulse_utils/impulse_utils.dart';
+import 'package:impulse_utils/models/application.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,35 +20,38 @@ class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   final _impulseUtilsPlugin = ImpulseUtils();
 
+  late final Future<List<Application>> future;
+
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    future = _impulseUtilsPlugin.getInstalledApplication();
+    // initPlatformState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    await _impulseUtilsPlugin.getInstalledApplication();
-    return;
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion = await _impulseUtilsPlugin.getPlatformVersion() ??
-          'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
+  // Future<void> initPlatformState() async {
+  //   await _impulseUtilsPlugin.getInstalledApplication();
+  //   return;
+  //   String platformVersion;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   // We also handle the message potentially returning null.
+  //   try {
+  //     platformVersion = await _impulseUtilsPlugin.getPlatformVersion() ??
+  //         'Unknown platform version';
+  //   } on PlatformException {
+  //     platformVersion = 'Failed to get platform version.';
+  //   }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
+  //   // If the widget was removed from the tree while the asynchronous platform
+  //   // message was in flight, we want to discard the reply rather than calling
+  //   // setState to update our non-existent appearance.
+  //   if (!mounted) return;
 
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
+  //   setState(() {
+  //     _platformVersion = platformVersion;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +60,21 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 50.0),
+          child: FutureBuilder(
+            future: future,
+            builder: (context, data) {
+              if (!data.hasData) return const CircularProgressIndicator();
+              return ListView.builder(
+                itemCount: data.data!.length,
+                itemBuilder: (context, index) {
+                  final app = data.data![index];
+                  return Text(app.appName);
+                },
+              );
+            },
+          ),
         ),
       ),
     );
