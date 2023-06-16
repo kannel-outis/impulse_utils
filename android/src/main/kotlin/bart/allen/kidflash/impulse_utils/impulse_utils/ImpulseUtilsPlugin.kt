@@ -42,7 +42,7 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
 
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    val handler = Handler(Looper.getMainLooper())
+//    val handler = Handler(Looper.getMainLooper())
     if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
     } else if (call.method == "getDeviceApplications"){
@@ -58,9 +58,9 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
         }
 
       } else {
-        handler.post{
+//        handler.post{
           result.error( "404","Android version cannot perform this operation", "")
-        }
+//        }
       }
 
 
