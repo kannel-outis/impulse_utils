@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
-import 'package:impulse_utils/file_manager/file_manager.dart';
-import 'package:impulse_utils/file_manager/impulse_file.dart';
 import 'package:impulse_utils/impulse_utils.dart';
-import 'package:impulse_utils/models/application.dart';
-import 'package:impulse_utils_example/second_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

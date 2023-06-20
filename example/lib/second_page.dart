@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:impulse_utils/file_manager/file_manager.dart';
-import 'package:impulse_utils/file_manager/impulse_file.dart';
+import 'package:impulse_utils/impulse_utils.dart';
 
 class SecondPage extends StatelessWidget {
   final List<ImpulseFileEntity> files;

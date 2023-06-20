@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:impulse_utils/models/application.dart';
+import 'package:impulse_utils/src/models/application.dart';
 
 import 'impulse_utils_platform_interface.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:impulse_utils/impulse_utils.dart';
-import 'package:impulse_utils/impulse_utils_platform_interface.dart';
-import 'package:impulse_utils/impulse_utils_method_channel.dart';
-import 'package:impulse_utils/models/application.dart';
+import 'package:impulse_utils/src/impulse_utils.dart';
+import 'package:impulse_utils/src/impulse_utils_platform_interface.dart';
+import 'package:impulse_utils/src/impulse_utils_method_channel.dart';
+import 'package:impulse_utils/src/models/application.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockImpulseUtilsPlatform

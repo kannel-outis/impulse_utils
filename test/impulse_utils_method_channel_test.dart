@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:impulse_utils/impulse_utils_method_channel.dart';
+import 'package:impulse_utils/src/impulse_utils_method_channel.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:impulse_utils/file_manager/utils.dart';
+import 'package:impulse_utils/src/file_manager/utils.dart';
 
 abstract interface class ImpulseFileEntity {
   final FileSystemEntity file;
