@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
-class Application {
+import 'package:impulse_utils/src/models/file_size.dart';
+
+class Application extends FileSize {
   final String appName;
   final String packageName;
   final String appPath;
@@ -17,7 +19,7 @@ class Application {
     required this.appSize,
     this.isSystemApp = false,
     this.isDisabled = false,
-  });
+  }) : super(appSize);
   factory Application.fromMap(Map<String, dynamic> map) {
     return Application(
       appName: map["appName"] as String,
