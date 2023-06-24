@@ -54,7 +54,7 @@ class FileManager {
   List<ImpulseFileEntity> getFileInDir([ImpulseFileEntity? folder]) {
     final files = <ImpulseFile>[];
     final directories = <ImpulseDirectory>[];
-    final dir = (folder?.file as Directory?) ?? _rootDir.first;
+    final dir = (folder?.fileSystemEntity as Directory?) ?? _rootDir.first;
     final listSync = dir.listSync();
     listSync
         .sort((a, b) => a.path.toLowerCase().compareTo(b.path.toLowerCase()));

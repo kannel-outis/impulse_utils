@@ -4,17 +4,18 @@ import 'package:impulse_utils/src/file_manager/utils.dart';
 import 'package:impulse_utils/src/models/file_size.dart';
 
 abstract interface class ImpulseFileEntity extends FileSize {
-  final FileSystemEntity file;
+  final FileSystemEntity fileSystemEntity;
+
   const ImpulseFileEntity({
     required int size,
-    required this.file,
+    required this.fileSystemEntity,
   }) : super(size);
 
-  bool get isFolder => file is Directory;
+  bool get isFolder => fileSystemEntity is Directory;
 
   int? get numberOfItemsInFolder {
     if (isFolder) {
-      final dir = file as Directory;
+      final dir = fileSystemEntity as Directory;
       if (!dir.existsSync()) return null;
       return dir.listSync().length;
     }
@@ -23,11 +24,11 @@ abstract interface class ImpulseFileEntity extends FileSize {
 
   ImpulseFileType? get fileType {
     if (isFolder) return null;
-    return file.path.getFileType;
+    return fileSystemEntity.path.getFileType;
   }
 
   String get name {
-    return file.path.split("/").last;
+    return fileSystemEntity.path.split("/").last;
   }
 
   ImpulseFile get castToFile {
@@ -36,13 +37,15 @@ abstract interface class ImpulseFileEntity extends FileSize {
 }
 
 class ImpulseDirectory extends ImpulseFileEntity {
-  const ImpulseDirectory({required Directory directory})
-      : super(file: directory, size: 0);
+  final Directory directory;
+  const ImpulseDirectory({required this.directory})
+      : super(fileSystemEntity: directory, size: 0);
 }
 
 class ImpulseFile extends ImpulseFileEntity {
-  const ImpulseFile({required File file, required int size})
-      : super(size: size, file: file);
+  final File file;
+  const ImpulseFile({required this.file, required int size})
+      : super(size: size, fileSystemEntity: file);
 
   int get totalFileSize {
     final f = File(file.path);
