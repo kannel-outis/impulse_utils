@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:impulse_utils/src/models/application.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -29,4 +32,11 @@ abstract class ImpulseUtilsPlatform extends PlatformInterface {
   }
 
   Future<List<Application>> getDeviceApplications(bool showSystemApps);
+
+  Future<(String?, Uint8List?)> getMediaThumbNail({
+    required String file,
+    required bool isVideo,
+    required bool returnPath,
+    required Size size,
+  });
 }

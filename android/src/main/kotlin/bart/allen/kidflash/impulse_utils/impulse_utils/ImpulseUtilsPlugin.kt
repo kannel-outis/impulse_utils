@@ -4,12 +4,11 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.media.ThumbnailUtils
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
+import android.os.CancellationSignal
+import android.util.Size
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 
@@ -24,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 
 /** ImpulseUtilsPlugin */
 class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
@@ -33,6 +33,7 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
   private lateinit var flutterbinding: FlutterPluginBinding
+  private val thumbnailSizeMiniKind: Size = Size(512, 384)
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     this.flutterbinding = flutterPluginBinding
@@ -64,9 +65,58 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
       }
 
 
-    } else {
+    } else if(call.method == "getMediaThumbnail") {
+      val isVideo = call.argument<Boolean>("isVideo")!!
+      val path = call.argument<String>("filePath")!!
+      val width = call.argument<Int?>("width")
+      val height = call.argument<Int?>("height")
+      val outputPath = call.argument<String?>("output")
+      val size = if (width ==null || height ==null)  null else Size(width, height)
+      CoroutineScope(Dispatchers.IO).launch {
+        if (outputPath != null){
+          val output = getThumbNail( path, size, outputPath, isVideo)
+          result.success(output)
+        }else{
+          val byteArray  = getThumbNail(path, size, isVideo)
+          result.success(byteArray)
+        }
+      }
+
+
+    }else {
       result.notImplemented()
     }
+  }
+
+  private fun getThumbNail(filePath: String, size: Size?, outputPath: String, isVideo: Boolean): String?{
+    val file = File(filePath)
+    val cancellationSignal = CancellationSignal()
+   val thumbNail =
+     if(isVideo)
+       ThumbnailUtils.createVideoThumbnail(file, size?: thumbnailSizeMiniKind, cancellationSignal)
+   else
+     ThumbnailUtils.createImageThumbnail(file, size ?: thumbnailSizeMiniKind, cancellationSignal)
+    var output:String? = null
+    try {
+        val fileOutputStream = FileOutputStream(outputPath)
+        fileOutputStream.write(getByteArray(thumbNail))
+        fileOutputStream.close();
+       output = outputPath
+    }catch ( _: Exception){
+      output = null
+    }
+    return output
+  }
+
+  private fun getThumbNail(filePath: String, size: Size?, isVideo: Boolean): ByteArray {
+    val file = File(filePath)
+    val cancellationSignal = CancellationSignal()
+    val bitmap =
+      if(isVideo)
+        ThumbnailUtils.createVideoThumbnail(file, size?: thumbnailSizeMiniKind, cancellationSignal)
+      else
+        ThumbnailUtils.createImageThumbnail(file, size ?: thumbnailSizeMiniKind, cancellationSignal)
+    return getByteArray(bitmap, release = true)
   }
 
 
@@ -85,14 +135,21 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
       map["isSystemApp"] = (app.flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0
       map["isDisabled"] = !app.enabled
       val bitMap = getBitMapFromDrawable(packageManager.getApplicationIcon(app))
-      val outputStream = ByteArrayOutputStream()
-      bitMap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-      map["appIcon"] = outputStream.toByteArray()
+
+      map["appIcon"] = getByteArray(bitMap)
+      bitMap.recycle();
 //      Log.d("native",  outputStream.toByteArray().toString())
       mutableList.add(map)
     }
 
     return mutableList
+  }
+
+  private fun getByteArray(bitmap: Bitmap, quality: Int? = null, release: Boolean = false): ByteArray{
+    val outputStream = ByteArrayOutputStream()
+   bitmap.compress(Bitmap.CompressFormat.PNG,   quality?:100, outputStream)
+    if (release) bitmap.recycle()
+    return outputStream.toByteArray()
   }
 
   private fun getBitMapFromDrawable (drawable: Drawable) : Bitmap{
