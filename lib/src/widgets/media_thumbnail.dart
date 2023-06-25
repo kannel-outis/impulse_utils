@@ -13,6 +13,7 @@ class MediaThumbnail extends StatefulWidget {
   final Size? size;
   final Duration? fadeDuration;
   final bool reCache;
+  final double containerSize;
 
   const MediaThumbnail({
     super.key,
@@ -23,6 +24,7 @@ class MediaThumbnail extends StatefulWidget {
     this.size,
     this.fadeDuration,
     this.reCache = false,
+    this.containerSize = 50,
   });
 
   @override
@@ -52,6 +54,7 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
         widget.returnPath != oldWidget.returnPath ||
         widget.size != oldWidget.size ||
         widget.isVideo ||
+        widget.containerSize != oldWidget.containerSize ||
         oldWidget.isVideo) {
       _future = _impulseUtils.getMediaThumbNail(
         file: widget.file,
@@ -60,6 +63,7 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
         size: widget.size,
         reCache: widget.reCache,
       );
+      setState(() {});
       // build(context);
     }
   }
@@ -72,14 +76,32 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
       return widget.placeHolder;
     } else {
       if (snapshot.data!.$1 != null) {
-        return Image.file(
-          File(snapshot.data!.$1!),
-          fit: BoxFit.cover,
+        return Container(
+          height: widget.containerSize,
+          width: widget.containerSize,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: FileImage(
+                File(snapshot.data!.$1!),
+              ),
+              fit: BoxFit.cover,
+            ),
+            color: Colors.black,
+          ),
         );
       } else {
-        return Image.memory(
-          snapshot.data!.$2!,
-          fit: BoxFit.cover,
+        return Container(
+          height: widget.containerSize,
+          width: widget.containerSize,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: MemoryImage(
+                snapshot.data!.$2!,
+              ),
+              fit: BoxFit.cover,
+            ),
+            color: Colors.black,
+          ),
         );
       }
     }

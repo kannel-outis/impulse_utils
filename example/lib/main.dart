@@ -1,11 +1,9 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:impulse_utils/impulse_utils.dart';
-import 'package:impulse_utils/widgets/media_thumbnail.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
