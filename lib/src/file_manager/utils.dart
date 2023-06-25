@@ -1,7 +1,7 @@
 enum ImpulseFileType {
-  mp3("Mp3"),
-  mp4("Mp4"),
-  mov("Mov"),
+  mp3("mp3"),
+  mp4("mp4"),
+  mov("mov"),
   pdf("pdf"),
   docx("docx"),
   doc("doc"),
