@@ -18,8 +18,13 @@ class ImpulseUtils {
       {required String file,
       bool isVideo = true,
       bool returnPath = false,
-      required Size size}) {
+      bool reCache = false,
+      Size? size}) {
     return ImpulseUtilsPlatform.instance.getMediaThumbNail(
-        file: file, returnPath: returnPath, size: size, isVideo: isVideo);
+        file: file,
+        returnPath: returnPath,
+        size: size,
+        isVideo: isVideo,
+        reCache: reCache);
   }
 }

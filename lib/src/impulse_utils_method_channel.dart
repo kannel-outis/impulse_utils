@@ -48,21 +48,26 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
     required String file,
     required bool isVideo,
     required bool returnPath,
-    required Size size,
+    Size? size,
+    required bool reCache,
   }) async {
     final outputFile = await _getOutputPath(file);
     try {
       final args = <String, dynamic>{
         "isVideo": isVideo,
         "filePath": file,
-        "width": size.width,
-        "height": size.height,
+        "width": size?.width,
+        "height": size?.height,
         "output": outputFile.path,
       };
 
       if (returnPath) {
         if (outputFile.existsSync()) {
-          return (outputFile.path, null);
+          if (reCache) {
+            outputFile.deleteSync(recursive: true);
+          } else {
+            return (outputFile.path, null);
+          }
         }
         final result =
             await methodChannel.invokeMethod("getMediaThumbnail", args);

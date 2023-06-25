@@ -37,6 +37,7 @@ abstract class ImpulseUtilsPlatform extends PlatformInterface {
     required String file,
     required bool isVideo,
     required bool returnPath,
-    required Size size,
+    Size? size,
+    required bool reCache,
   });
 }

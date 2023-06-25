@@ -33,7 +33,7 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
   private lateinit var flutterbinding: FlutterPluginBinding
-  private val thumbnailSizeMiniKind: Size = Size(512, 384)
+  private val thumbnailSizeMiniKind: Size = /*Size(512, 384) */ Size(200,200)
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     this.flutterbinding = flutterPluginBinding
@@ -73,13 +73,19 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
       val outputPath = call.argument<String?>("output")
       val size = if (width ==null || height ==null)  null else Size(width, height)
       CoroutineScope(Dispatchers.IO).launch {
-        if (outputPath != null){
-          val output = getThumbNail( path, size, outputPath, isVideo)
-          result.success(output)
-        }else{
-          val byteArray  = getThumbNail(path, size, isVideo)
-          result.success(byteArray)
-        }
+
+      try {
+         if (outputPath != null){
+           val output = getThumbNail( path, size, outputPath, isVideo)
+           result.success(output)
+         }else{
+           val byteArray  = getThumbNail(path, size, isVideo)
+           result.success(byteArray)
+         }
+     }catch (e: Exception){
+        val error = e.localizedMessage
+       result.error("404", error?: "Something went wrong", "")
+     }
       }
 
 
@@ -91,21 +97,24 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
   private fun getThumbNail(filePath: String, size: Size?, outputPath: String, isVideo: Boolean): String?{
     val file = File(filePath)
     val cancellationSignal = CancellationSignal()
-   val thumbNail =
-     if(isVideo)
-       ThumbnailUtils.createVideoThumbnail(file, size?: thumbnailSizeMiniKind, cancellationSignal)
-   else
-     ThumbnailUtils.createImageThumbnail(file, size ?: thumbnailSizeMiniKind, cancellationSignal)
+
     var output:String? = null
     try {
+      val thumbNail =
+        if(isVideo)
+          ThumbnailUtils.createVideoThumbnail(file, size?: thumbnailSizeMiniKind, cancellationSignal)
+        else
+          ThumbnailUtils.createImageThumbnail(file, size ?: thumbnailSizeMiniKind, cancellationSignal)
         val fileOutputStream = FileOutputStream(outputPath)
         fileOutputStream.write(getByteArray(thumbNail))
         fileOutputStream.close();
        output = outputPath
-    }catch ( _: Exception){
+      return output
+
+    }catch ( e: Exception){
       output = null
+      throw e
     }
-    return output
   }
 
   private fun getThumbNail(filePath: String, size: Size?, isVideo: Boolean): ByteArray {
