@@ -86,7 +86,7 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
               ),
               fit: BoxFit.cover,
             ),
-            color: Colors.black,
+            color: Colors.transparent,
           ),
         );
       } else {
@@ -100,7 +100,7 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
               ),
               fit: BoxFit.cover,
             ),
-            color: Colors.black,
+            color: Colors.transparent,
           ),
         );
       }
