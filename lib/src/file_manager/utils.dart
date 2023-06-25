@@ -20,8 +20,12 @@ enum ImpulseFileType {
 extension FileType on String {
   ImpulseFileType get getFileType {
     final surffix = split(".").last;
-    return ImpulseFileType.values
-        .where((element) => element.type == surffix)
-        .first;
+    final list =
+        ImpulseFileType.values.where((element) => element.type == surffix);
+    if (list.isNotEmpty) {
+      return list.first;
+    } else {
+      return ImpulseFileType.others;
+    }
   }
 }
