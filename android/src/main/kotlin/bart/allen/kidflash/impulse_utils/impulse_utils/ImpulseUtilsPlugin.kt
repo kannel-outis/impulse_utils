@@ -33,7 +33,7 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
   private lateinit var flutterbinding: FlutterPluginBinding
-  private val thumbnailSizeMiniKind: Size = /*Size(512, 384) */ Size(200,200)
+  private val thumbnailSizeMiniKind: Size = /*Size(512, 384) */ Size(512,384)
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     this.flutterbinding = flutterPluginBinding
@@ -106,7 +106,7 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
         else
           ThumbnailUtils.createImageThumbnail(file, size ?: thumbnailSizeMiniKind, cancellationSignal)
         val fileOutputStream = FileOutputStream(outputPath)
-        fileOutputStream.write(getByteArray(thumbNail))
+        fileOutputStream.write(getByteArray(thumbNail, useWebp = true))
         fileOutputStream.close();
        output = outputPath
       return output
@@ -154,9 +154,9 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
     return mutableList
   }
 
-  private fun getByteArray(bitmap: Bitmap, quality: Int? = null, release: Boolean = false): ByteArray{
+  private fun getByteArray(bitmap: Bitmap, quality: Int? = null, release: Boolean = false, useWebp: Boolean = false ): ByteArray{
     val outputStream = ByteArrayOutputStream()
-   bitmap.compress(Bitmap.CompressFormat.PNG,   quality?:100, outputStream)
+   bitmap.compress( if(useWebp)  Bitmap.CompressFormat.WEBP  else Bitmap.CompressFormat.PNG,   quality?:30, outputStream)
     if (release) bitmap.recycle()
     return outputStream.toByteArray()
   }

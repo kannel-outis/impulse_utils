@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -51,13 +52,15 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
     Size? size,
     required bool reCache,
   }) async {
-    final outputFile = await _getOutputPath(file);
+    final outputFile = await _getOutputPath(file, isVideo);
+    // print(outputFile);
+    // throw Exception("");
     try {
       final args = <String, dynamic>{
         "isVideo": isVideo,
         "filePath": file,
-        "width": size?.width,
-        "height": size?.height,
+        "width": size?.width.toInt(),
+        "height": size?.height.toInt(),
         "output": outputFile.path,
       };
 
@@ -85,9 +88,25 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
     }
   }
 
-  Future<File> _getOutputPath(String filePath) async {
-    final appDir = (await getTemporaryDirectory()).path;
+  Future<File> _getOutputPath(String filePath, bool isVideo) async {
+    // final appDir = (await getTemporaryDirectory()).path;
+    final appDir = Directory('/storage/emulated/0/impulse2');
+    late final String dirPath;
+    if (!appDir.existsSync()) {
+      await appDir.create();
+      dirPath = appDir.path;
+    } else {
+      dirPath = appDir.path;
+    }
     final fileName = filePath.split("/").last;
-    return File("$appDir/$fileName");
+    if (isVideo) {
+      final list = fileName.split(".");
+      list.removeLast();
+      list.add("webp");
+      // list.add("jpg");
+      final fileNameWithMime = list.join(".");
+      return File("$dirPath/$fileNameWithMime");
+    }
+    return File("$dirPath/$fileName");
   }
 }

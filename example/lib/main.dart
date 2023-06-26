@@ -27,6 +27,8 @@ class _MyAppState extends State<MyApp> {
   final String path2 =
       "storage/emulated/0/Download/Pipe/Clean Architecture with Flutter.mp4";
 
+  final String path3 = "storage/emulated/0/Video/video.mp4";
+
   late final Future<List<Application>> future;
   late final Future<(String?, Uint8List?)> future2;
   late final List<ImpulseFileEntity> queriedFiles;
@@ -36,7 +38,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     // future = _impulseUtilsPlugin.getInstalledApplication();
     queriedFiles = FileManager.instance.getFileInDir();
-    future2 = getThumb();
+    // future2 = getThumb();
     // initPlatformState();
   }
 
@@ -132,8 +134,10 @@ class _MyAppState extends State<MyApp> {
               Icons.video_label,
               size: 40,
             ),
-            file: path2,
+            file: path3,
             isVideo: true,
+            // size: const Size(150, 150),
+            reCache: true,
           ),
         ),
       ),
