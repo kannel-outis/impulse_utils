@@ -89,24 +89,24 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
   }
 
   Future<File> _getOutputPath(String filePath, bool isVideo) async {
-    // final appDir = (await getTemporaryDirectory()).path;
-    final appDir = Directory('/storage/emulated/0/impulse2');
-    late final String dirPath;
-    if (!appDir.existsSync()) {
-      await appDir.create();
-      dirPath = appDir.path;
-    } else {
-      dirPath = appDir.path;
-    }
+    final appDir = (await getTemporaryDirectory()).path;
+    // final appDir = Directory('/storage/emulated/0/impulse2');
+    // late final String dirPath;
+    // if (!appDir.existsSync()) {
+    //   await appDir.create();
+    //   dirPath = appDir.path;
+    // } else {
+    //   dirPath = appDir.path;
+    // }
     final fileName = filePath.split("/").last;
-    if (isVideo) {
-      final list = fileName.split(".");
-      list.removeLast();
-      list.add("webp");
-      // list.add("jpg");
-      final fileNameWithMime = list.join(".");
-      return File("$dirPath/$fileNameWithMime");
-    }
-    return File("$dirPath/$fileName");
+    // if (isVideo) {
+    final list = fileName.split(".");
+    list.removeLast();
+    list.add("webp");
+    // list.add("jpg");
+    final fileNameWithMime = list.join(".");
+    return File("$appDir/$fileNameWithMime");
+    // }
+    // return File("$dirPath/$fileName");
   }
 }
