@@ -77,28 +77,28 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
     } else {
       if (snapshot.data!.$1 != null) {
         return Container(
-          // height: widget.containerSize,
-          // width: widget.containerSize,
+          height: widget.containerSize,
+          width: widget.containerSize,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: FileImage(
                 File(snapshot.data!.$1!),
               ),
-              // fit: BoxFit.cover,
+              fit: BoxFit.cover,
             ),
             color: Colors.transparent,
           ),
         );
       } else {
         return Container(
-          // height: widget.containerSize,
-          // width: widget.containerSize,
+          height: widget.containerSize,
+          width: widget.containerSize,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: MemoryImage(
                 snapshot.data!.$2!,
               ),
-              // fit: BoxFit.cover,
+              fit: BoxFit.cover,
             ),
             color: Colors.transparent,
           ),
