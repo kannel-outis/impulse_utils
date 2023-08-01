@@ -28,7 +28,7 @@ abstract interface class ImpulseFileEntity extends FileSize {
   }
 
   String get name {
-    return fileSystemEntity.path.split("/").last;
+    return fileSystemEntity.path.split(Platform.pathSeparator).last;
   }
 
   ImpulseFile get castToFile {
