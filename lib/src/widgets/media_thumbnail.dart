@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:impulse_utils/impulse_utils.dart';
 
 class MediaThumbnail extends StatefulWidget {
@@ -75,35 +74,7 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
     if (!snapshot.hasData) {
       return widget.placeHolder;
     } else {
-      if (snapshot.data!.$1 != null) {
-        return Container(
-          height: widget.containerSize,
-          width: widget.containerSize,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: FileImage(
-                File(snapshot.data!.$1!),
-              ),
-              fit: BoxFit.cover,
-            ),
-            color: Colors.transparent,
-          ),
-        );
-      } else {
-        return Container(
-          height: widget.containerSize,
-          width: widget.containerSize,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: MemoryImage(
-                snapshot.data!.$2!,
-              ),
-              fit: BoxFit.cover,
-            ),
-            color: Colors.transparent,
-          ),
-        );
-      }
+      return _Image(data: snapshot.data!, containerSize: widget.containerSize);
     }
   }
 
@@ -117,6 +88,39 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
           child: child(snapshot),
         );
       },
+    );
+  }
+}
+
+class _Image extends StatelessWidget {
+  final double? containerSize;
+  final (String?, Uint8List?) data;
+  const _Image({
+    Key? key,
+    this.containerSize,
+    required this.data,
+  }) : super(key: key);
+
+  ImageProvider _getProvider() {
+    if (data.$1 != null) {
+      return FileImage(File(data.$1!));
+    } else {
+      return MemoryImage(data.$2!);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: containerSize,
+      width: containerSize,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: _getProvider(),
+          fit: BoxFit.cover,
+        ),
+        color: Colors.transparent,
+      ),
     );
   }
 }

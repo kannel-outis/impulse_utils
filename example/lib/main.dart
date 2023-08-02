@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     // future = _impulseUtilsPlugin.getInstalledApplication();
-    queriedFiles = FileManager.instance.getFileInDir();
+    // queriedFiles = FileManager.instance.getFileInDir();
     // future2 = getThumb();
     // initPlatformState();
   }
@@ -129,15 +129,25 @@ class _MyAppState extends State<MyApp> {
           //     return Image.file(File(data.data!.$1!));
           //   },
           // ),
-          child: MediaThumbnail(
-            placeHolder: const Icon(
-              Icons.video_label,
-              size: 40,
-            ),
-            file: path3,
-            isVideo: true,
-            // size: const Size(150, 150),
-            reCache: true,
+          // child: MediaThumbnail(
+          //   placeHolder: const Icon(
+          //     Icons.video_label,
+          //     size: 40,
+          //   ),
+          //   file: path3,
+          //   isVideo: true,
+          //   // size: const Size(150, 150),
+          //   reCache: true,
+          // ),
+          child: FutureBuilder(
+            future: FileManager.instance.getFileInDirAsync(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData == false) {
+                return const CircularProgressIndicator();
+              } else {
+                return Text(snapshot.data!.length.toString());
+              }
+            },
           ),
         ),
       ),

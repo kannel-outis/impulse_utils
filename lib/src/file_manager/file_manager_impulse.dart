@@ -70,4 +70,28 @@ class FileManager {
 
     return list;
   }
+
+  Future<List<ImpulseFileEntity>> getFileInDirAsync(
+      [ImpulseFileEntity? folder]) async {
+    final listSync = <FileSystemEntity>[];
+    final files = <ImpulseFile>[];
+    final directories = <ImpulseDirectory>[];
+    final dir = (folder?.fileSystemEntity as Directory?) ?? _rootDir.first;
+    await for (final entity in dir.list()) {
+      listSync.add(entity);
+    }
+    listSync
+        .sort((a, b) => a.path.toLowerCase().compareTo(b.path.toLowerCase()));
+    for (var item in listSync) {
+      if (item is File) {
+        files.add(ImpulseFile(file: item, size: item.lengthSync()));
+      } else {
+        directories.add(ImpulseDirectory(directory: item as Directory));
+      }
+    }
+
+    final list = [...directories, ...files];
+
+    return list;
+  }
 }

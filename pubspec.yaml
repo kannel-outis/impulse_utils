@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  go_router: ^6.5.5
   path_provider: ^2.0.15
   plugin_platform_interface: ^2.0.2
 
