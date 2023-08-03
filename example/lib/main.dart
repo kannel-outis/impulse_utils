@@ -151,7 +151,13 @@ class _MyAppState extends State<MyApp> {
                     //   (e) => Text(e.fileSystemEntity.path),
                     // ),
                     for (final s in snapshot.data!)
-                      Text(s.fileSystemEntity.path),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(s.rootName ?? s.name),
+                          Text(s.isPhoneStorageRoot.toString()),
+                        ],
+                      ),
                   ],
                 );
               }
