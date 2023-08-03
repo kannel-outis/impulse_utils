@@ -145,7 +145,15 @@ class _MyAppState extends State<MyApp> {
               if (snapshot.hasData == false) {
                 return const CircularProgressIndicator();
               } else {
-                return Text(snapshot.data!.length.toString());
+                return ListView(
+                  children: [
+                    // ...snapshot.data!.map(
+                    //   (e) => Text(e.fileSystemEntity.path),
+                    // ),
+                    for (final s in snapshot.data!)
+                      Text(s.fileSystemEntity.path),
+                  ],
+                );
               }
             },
           ),

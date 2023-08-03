@@ -71,18 +71,35 @@ class FileManager {
     return list;
   }
 
+  Future<List<FileSystemEntity>> _useRootIfNull(Directory? dir) async {
+    final listSync = <FileSystemEntity>[];
+
+    if (dir == null) {
+      return _rootDir;
+    } else {
+      await for (final entity in dir.list()) {
+        listSync.add(entity);
+      }
+      return listSync;
+    }
+  }
+
   Future<List<ImpulseFileEntity>> getFileInDirAsync(
       [ImpulseFileEntity? folder]) async {
-    final listSync = <FileSystemEntity>[];
     final files = <ImpulseFile>[];
     final directories = <ImpulseDirectory>[];
-    final dir = (folder?.fileSystemEntity as Directory?) ?? _rootDir.first;
-    await for (final entity in dir.list()) {
-      listSync.add(entity);
+    final dir = (folder?.fileSystemEntity as Directory?);
+    final listAsync = await _useRootIfNull(dir);
+    /*
+      * if dir is null that means we are loading the root and should not be sorted
+      * this makes the phone storage to come first as it has a longer path which will
+      * cause it to come last if sorted.
+    */
+    if (dir != null) {
+      listAsync
+          .sort((a, b) => a.path.toLowerCase().compareTo(b.path.toLowerCase()));
     }
-    listSync
-        .sort((a, b) => a.path.toLowerCase().compareTo(b.path.toLowerCase()));
-    for (var item in listSync) {
+    for (var item in listAsync) {
       if (item is File) {
         files.add(ImpulseFile(file: item, size: item.lengthSync()));
       } else {
