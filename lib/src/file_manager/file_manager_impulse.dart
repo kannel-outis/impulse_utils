@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:impulse_utils/impulse_utils.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'impulse_file.dart';
@@ -86,8 +87,17 @@ class FileManager {
 
   Future<List<ImpulseFileEntity>> getFileInDirAsync(
       [ImpulseFileEntity? folder]) async {
-    final files = <ImpulseFile>[];
     final directories = <ImpulseDirectory>[];
+    final files = <ImpulseFile>[];
+    if (folder == null && Platform.isAndroid) {
+      for (var path in rootPath) {
+        final rootInfo = await ImpulseUtils().getStorageInfo(path);
+        if (rootInfo != null) {
+          directories.add(rootInfo);
+        }
+      }
+      return directories;
+    }
     final dir = (folder?.fileSystemEntity as Directory?);
     final listAsync = await _useRootIfNull(dir);
     /*
@@ -103,11 +113,9 @@ class FileManager {
     }
     for (var item in listAsync) {
       if (item is File) {
-        files.add(
-            ImpulseFile(file: item, size: item.lengthSync(), isRoot: isRoot));
+        files.add(ImpulseFile(file: item, size: item.lengthSync()));
       } else {
-        directories.add(
-            ImpulseDirectory(directory: item as Directory, isRoot: isRoot));
+        directories.add(ImpulseDirectory(directory: item as Directory));
       }
     }
 

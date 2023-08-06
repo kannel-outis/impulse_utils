@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:impulse_utils/src/models/application.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'file_manager/impulse_file.dart';
 import 'impulse_utils_method_channel.dart';
 
 abstract class ImpulseUtilsPlatform extends PlatformInterface {
@@ -40,4 +41,5 @@ abstract class ImpulseUtilsPlatform extends PlatformInterface {
     Size? size,
     required bool reCache,
   });
+  Future<ImpulseFileStorage?> getStorageInfo(String dir);
 }

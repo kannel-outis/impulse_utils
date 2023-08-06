@@ -16,3 +16,7 @@ abstract class FileSize {
     }
   }
 }
+
+class FileSizeObj extends FileSize {
+  FileSizeObj(super.size);
+}

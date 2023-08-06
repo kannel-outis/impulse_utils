@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:impulse_utils/src/models/application.dart';
+import 'file_manager/impulse_file.dart';
+import 'models/application.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'impulse_utils_platform_interface.dart';
@@ -26,7 +26,7 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
     final applications = <Application>[];
     try {
       final result =
-          await methodChannel.invokeMethod<List>("getDeviceApplications");
+          await methodChannel.invokeListMethod("getDeviceApplications");
       if (result != null) {
         for (var app in result) {
           final resultMap = Map<String, dynamic>.from(app)
@@ -108,5 +108,21 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
     return File("$appDir/$fileNameWithMime");
     // }
     // return File("$dirPath/$fileName");
+  }
+
+  @override
+  Future<ImpulseFileStorage?> getStorageInfo(String dir) async {
+    try {
+      final result = await methodChannel
+          .invokeMethod("getStorageInfo", <String, dynamic>{"path": dir});
+
+      final resultMap = Map<String, dynamic>.from(result)
+          .map((key, value) => MapEntry(key, value as dynamic));
+
+      return ImpulseFileStorage.fromMap(resultMap);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 }

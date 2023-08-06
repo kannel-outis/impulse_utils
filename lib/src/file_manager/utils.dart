@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 enum ImpulseFileType {
   mp3("mp3"),
   mp4("mp4"),
@@ -15,6 +17,14 @@ enum ImpulseFileType {
 
   final String type;
   const ImpulseFileType(this.type);
+}
+
+enum FileStorageType {
+  Internal("Phone Storage"),
+  External("Sd card");
+
+  const FileStorageType(this.label);
+  final String label;
 }
 
 extension FileType on String {

@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:impulse_utils/src/models/application.dart';
 
+import 'file_manager/impulse_file.dart';
 import 'impulse_utils_platform_interface.dart';
 
 class ImpulseUtils {
@@ -26,5 +27,9 @@ class ImpulseUtils {
         size: size,
         isVideo: isVideo,
         reCache: reCache);
+  }
+
+  Future<ImpulseFileStorage?> getStorageInfo(String dir) async {
+    return await ImpulseUtilsPlatform.instance.getStorageInfo(dir);
   }
 }

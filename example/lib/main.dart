@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -40,6 +42,11 @@ class _MyAppState extends State<MyApp> {
     // queriedFiles = FileManager.instance.getFileInDir();
     // future2 = getThumb();
     // initPlatformState();
+    // _impulseUtilsPlugin
+    //     .getStorageInfo(FileManager.instance.rootPath.first)
+    //     .then((value) {
+    //   log("${value?.remainingSizeToFileSize.gigaBytes.toString()}");
+    // });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -145,6 +152,12 @@ class _MyAppState extends State<MyApp> {
               if (snapshot.hasData == false) {
                 return const CircularProgressIndicator();
               } else {
+                log((snapshot.data!.first as ImpulseFileStorage)
+                    .usedSizeToFileSize
+                    .sizeToString);
+                log((snapshot.data!.last as ImpulseFileStorage)
+                    .usedSizeToFileSize
+                    .sizeToString);
                 return ListView(
                   children: [
                     // ...snapshot.data!.map(
@@ -154,8 +167,10 @@ class _MyAppState extends State<MyApp> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(s.rootName ?? s.name),
-                          Text(s.isPhoneStorageRoot.toString()),
+                          Text(s.isRoot
+                              ? (s as ImpulseFileStorage).type.label
+                              : s.name),
+                          Text(s.isRoot.toString()),
                         ],
                       ),
                   ],
