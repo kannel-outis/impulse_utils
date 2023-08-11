@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'file_manager/impulse_file.dart';
 import 'models/application.dart';
+import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 
 import 'impulse_utils_platform_interface.dart';
@@ -52,6 +53,11 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
     Size? size,
     required bool reCache,
   }) async {
+    if (!Platform.isAndroid) {
+      final path =
+          await _cacheWindows(file: file, reCache: reCache, size: size);
+      return (path, null);
+    }
     final outputFile = await _getOutputPath(file, isVideo);
     // print(outputFile);
     // throw Exception("");
@@ -67,7 +73,7 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
       if (returnPath) {
         if (outputFile.existsSync()) {
           if (reCache) {
-            outputFile.deleteSync(recursive: true);
+            outputFile.deleteSync();
           } else {
             return (outputFile.path, null);
           }
@@ -85,6 +91,39 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
         print(e.toString());
       }
       rethrow;
+    }
+  }
+
+  Future<String> _cacheWindows({
+    required String file,
+    Size? size,
+    required bool reCache,
+  }) async {
+    final docuPath = await getApplicationSupportDirectory();
+    final dir =
+        await Directory("${docuPath.path}${Platform.pathSeparator}.Thumbnails")
+            .create();
+    // ignore: no_leading_underscores_for_local_identifiers
+    final _file = File(file);
+    final impulseFile = ImpulseFile(file: _file, size: _file.lengthSync());
+    final returnFile =
+        File("${dir.path}${Platform.pathSeparator}${impulseFile.name}.png");
+
+    final fileExist = await returnFile.exists();
+    if (fileExist && reCache == false) {
+      return returnFile.path;
+    } else {
+      if (fileExist && reCache == true) returnFile.deleteSync();
+
+      await (img.Command()
+            ..decodeImageFile(file)
+            ..copyResize(
+                width: size?.width.toInt(),
+                height: size?.height.toInt(),
+                interpolation: img.Interpolation.average)
+            ..writeToFile(returnFile.path))
+          .executeThread();
+      return returnFile.path;
     }
   }
 

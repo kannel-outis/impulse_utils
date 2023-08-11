@@ -9,7 +9,7 @@ import 'package:impulse_utils/impulse_utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FileManager.instance.getRootPaths(true);
+  // await FileManager.instance.getRootPaths(true);
   runApp(const MyApp());
 }
 
@@ -84,7 +84,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print(FileManager.instance.rootPath);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -136,48 +135,51 @@ class _MyAppState extends State<MyApp> {
           //     return Image.file(File(data.data!.$1!));
           //   },
           // ),
-          // child: MediaThumbnail(
-          //   placeHolder: const Icon(
-          //     Icons.video_label,
-          //     size: 40,
-          //   ),
-          //   file: path3,
-          //   isVideo: true,
-          //   // size: const Size(150, 150),
-          //   reCache: true,
-          // ),
-          child: FutureBuilder(
-            future: FileManager.instance.getFileInDirAsync(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData == false) {
-                return const CircularProgressIndicator();
-              } else {
-                log((snapshot.data!.first as ImpulseFileStorage)
-                    .usedSizeToFileSize
-                    .sizeToString);
-                log((snapshot.data!.last as ImpulseFileStorage)
-                    .usedSizeToFileSize
-                    .sizeToString);
-                return ListView(
-                  children: [
-                    // ...snapshot.data!.map(
-                    //   (e) => Text(e.fileSystemEntity.path),
-                    // ),
-                    for (final s in snapshot.data!)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(s.isRoot
-                              ? (s as ImpulseFileStorage).type.label
-                              : s.name),
-                          Text(s.isRoot.toString()),
-                        ],
-                      ),
-                  ],
-                );
-              }
-            },
+          child: MediaThumbnail(
+            placeHolder: const Icon(
+              Icons.video_label,
+              size: 40,
+            ),
+            // file: path3,
+            file: "C:\$Users\$emirb\$OneDrive\$Pictures\$New folder\$clothes.jpg".replaceAll("\$", Platform.pathSeparator),
+            // file:
+            //     "C:${Platform.pathSeparator}Users${Platform.pathSeparator}emirb${Platform.pathSeparator}OneDrive${Platform.pathSeparator}Pictures${Platform.pathSeparator}New folder${Platform.pathSeparator}hanger_darkk.jpg",
+            isVideo: true,
+            size: const Size(512, 384),
+            reCache: true,
           ),
+          // child: FutureBuilder(
+          //   future: FileManager.instance.getFileInDirAsync(),
+          //   builder: (context, snapshot) {
+          //     if (snapshot.hasData == false) {
+          //       return const CircularProgressIndicator();
+          //     } else {
+          //       log((snapshot.data!.first as ImpulseFileStorage)
+          //           .usedSizeToFileSize
+          //           .sizeToString);
+          //       log((snapshot.data!.last as ImpulseFileStorage)
+          //           .usedSizeToFileSize
+          //           .sizeToString);
+          //       return ListView(
+          //         children: [
+          //           // ...snapshot.data!.map(
+          //           //   (e) => Text(e.fileSystemEntity.path),
+          //           // ),
+          //           for (final s in snapshot.data!)
+          //             Row(
+          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //               children: [
+          //                 Text(s.isRoot
+          //                     ? (s as ImpulseFileStorage).type.label
+          //                     : s.name),
+          //                 Text(s.isRoot.toString()),
+          //               ],
+          //             ),
+          //         ],
+          //       );
+          //     }
+          //   },
+          // ),
         ),
       ),
     );
