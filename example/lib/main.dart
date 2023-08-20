@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // future = _impulseUtilsPlugin.getInstalledApplication();
+    future = _impulseUtilsPlugin.getInstalledApplication();
     // queriedFiles = FileManager.instance.getFileInDir();
     // future2 = getThumb();
     // initPlatformState();
@@ -114,72 +114,72 @@ class _MyAppState extends State<MyApp> {
           //     );
           //   },
           // ),
-          // child: FutureBuilder(
-          //   future: future2,
-          //   builder: (context, data) {
-          //     if (!data.hasData) return const CircularProgressIndicator();
-          //     // return ListView.builder(
-          //     //   itemCount: data.data!.length,
-          //     //   itemBuilder: (context, index) {
-          //     //     final app = data.data![index];
-          //     //     return ListTile(
-          //     //       leading: Image.memory(app.appIcon),
-          //     //       title: Text(app.appName),
-          //     //       subtitle: Text(app.isSystemApp.toString()),
-          //     //     );
-          //     //   },
-          //     // );
-          //     if (data.data?.$1 == null) {
-          //       return Image.memory(data.data!.$2!);
-          //     }
-          //     return Image.file(File(data.data!.$1!));
-          //   },
-          // ),
-          child: MediaThumbnail(
-            placeHolder: const Icon(
-              Icons.video_label,
-              size: 40,
-            ),
-            // file: path3,
-            file: "C:\$Users\$emirb\$OneDrive\$Pictures\$New folder\$clothes.jpg".replaceAll("\$", Platform.pathSeparator),
-            // file:
-            //     "C:${Platform.pathSeparator}Users${Platform.pathSeparator}emirb${Platform.pathSeparator}OneDrive${Platform.pathSeparator}Pictures${Platform.pathSeparator}New folder${Platform.pathSeparator}hanger_darkk.jpg",
-            isVideo: true,
-            size: const Size(512, 384),
-            reCache: true,
+          child: FutureBuilder(
+            future: future,
+            builder: (context, data) {
+              if (!data.hasData) return const CircularProgressIndicator();
+              return ListView.builder(
+                itemCount: data.data!.length,
+                itemBuilder: (context, index) {
+                  final app = data.data![index];
+                  return ListTile(
+                    leading: Image.memory(app.appIcon),
+                    title: Text(app.appName),
+                    subtitle: Text(app.isSystemApp.toString()),
+                  );
+                },
+              );
+              //   if (data.data?.$1 == null) {
+              //     return Image.memory(data.data!.$2!);
+              //   }
+              //   return Image.file(File(data.data!.$1!));
+              // },
+              // ),
+              // child: MediaThumbnail(
+              //   placeHolder: const Icon(
+              //     Icons.video_label,
+              //     size: 40,
+              //   ),
+              //   // file: path3,
+              //   file: "C:\$Users\$emirb\$OneDrive\$Pictures\$New folder\$clothes.jpg".replaceAll("\$", Platform.pathSeparator),
+              //   // file:
+              //   //     "C:${Platform.pathSeparator}Users${Platform.pathSeparator}emirb${Platform.pathSeparator}OneDrive${Platform.pathSeparator}Pictures${Platform.pathSeparator}New folder${Platform.pathSeparator}hanger_darkk.jpg",
+              //   isVideo: true,
+              //   size: const Size(512, 384),
+              //   reCache: true,
+              // ),
+              // child: FutureBuilder(
+              //   future: FileManager.instance.getFileInDirAsync(),
+              //   builder: (context, snapshot) {
+              //     if (snapshot.hasData == false) {
+              //       return const CircularProgressIndicator();
+              //     } else {
+              //       log((snapshot.data!.first as ImpulseFileStorage)
+              //           .usedSizeToFileSize
+              //           .sizeToString);
+              //       log((snapshot.data!.last as ImpulseFileStorage)
+              //           .usedSizeToFileSize
+              //           .sizeToString);
+              //       return ListView(
+              //         children: [
+              //           // ...snapshot.data!.map(
+              //           //   (e) => Text(e.fileSystemEntity.path),
+              //           // ),
+              //           for (final s in snapshot.data!)
+              //             Row(
+              //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //               children: [
+              //                 Text(s.isRoot
+              //                     ? (s as ImpulseFileStorage).type.label
+              //                     : s.name),
+              //                 Text(s.isRoot.toString()),
+              //               ],
+              //             ),
+              //         ],
+              //       );
+              //     }
+            },
           ),
-          // child: FutureBuilder(
-          //   future: FileManager.instance.getFileInDirAsync(),
-          //   builder: (context, snapshot) {
-          //     if (snapshot.hasData == false) {
-          //       return const CircularProgressIndicator();
-          //     } else {
-          //       log((snapshot.data!.first as ImpulseFileStorage)
-          //           .usedSizeToFileSize
-          //           .sizeToString);
-          //       log((snapshot.data!.last as ImpulseFileStorage)
-          //           .usedSizeToFileSize
-          //           .sizeToString);
-          //       return ListView(
-          //         children: [
-          //           // ...snapshot.data!.map(
-          //           //   (e) => Text(e.fileSystemEntity.path),
-          //           // ),
-          //           for (final s in snapshot.data!)
-          //             Row(
-          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //               children: [
-          //                 Text(s.isRoot
-          //                     ? (s as ImpulseFileStorage).type.label
-          //                     : s.name),
-          //                 Text(s.isRoot.toString()),
-          //               ],
-          //             ),
-          //         ],
-          //       );
-          //     }
-          //   },
-          // ),
         ),
       ),
     );

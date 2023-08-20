@@ -188,7 +188,7 @@ class ImpulseUtilsPlugin: FlutterPlugin, MethodCallHandler {
       map["isDisabled"] = !app.enabled
       val bitMap = getBitMapFromDrawable(packageManager.getApplicationIcon(app))
 
-      map["appIcon"] = getByteArray(bitMap)
+      map["appIcon"] = getByteArray(bitMap, useWebp = true, quality = 15)
       bitMap.recycle();
 //      Log.d("native",  outputStream.toByteArray().toString())
       mutableList.add(map)
