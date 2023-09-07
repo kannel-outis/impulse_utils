@@ -7,7 +7,7 @@ import 'file_manager/impulse_file.dart';
 import 'impulse_utils_platform_interface.dart';
 
 class ImpulseUtils {
-  Future<String?> getPlatformVersion() {
+  Future<int?> getPlatformSdkInt() {
     return ImpulseUtilsPlatform.instance.getPlatformVersion();
   }
 

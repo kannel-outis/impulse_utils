@@ -115,20 +115,18 @@ class _MyAppState extends State<MyApp> {
           //   },
           // ),
           child: FutureBuilder(
-            future: future,
+            future: ImpulseUtils().getPlatformSdkInt(),
             builder: (context, data) {
               if (!data.hasData) return const CircularProgressIndicator();
-              return ListView.builder(
-                itemCount: data.data!.length,
-                itemBuilder: (context, index) {
-                  final app = data.data![index];
-                  return ListTile(
-                    leading: Image.memory(app.appIcon),
-                    title: Text(app.appName),
-                    subtitle: Text(app.isSystemApp.toString()),
-                  );
-                },
-              );
+
+              // final app = data.data![index];
+              // return ListTile(
+              //   leading: Image.memory(app.appIcon),
+              //   title: Text(app.appName),
+              //   subtitle: Text(app.isSystemApp.toString()),
+              // );
+              return Text(data.data?.toString() ?? "Unknown");
+
               //   if (data.data?.$1 == null) {
               //     return Image.memory(data.data!.$2!);
               //   }

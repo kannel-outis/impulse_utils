@@ -16,9 +16,9 @@ class MethodChannelImpulseUtils extends ImpulseUtilsPlatform {
   final methodChannel = const MethodChannel('impulse_utils');
 
   @override
-  Future<String?> getPlatformVersion() async {
+  Future<int?> getPlatformVersion() async {
     final version =
-        await methodChannel.invokeMethod<String>('getPlatformVersion');
+        await methodChannel.invokeMethod<int>('getPlatformSdkInt');
     return version;
   }
 
